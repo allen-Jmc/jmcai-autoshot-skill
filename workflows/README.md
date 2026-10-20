@@ -36,28 +36,38 @@ python scripts/avatar/check_setup.py   # 数字人
 
 ## 二、依赖的自定义节点
 
-这些工作流用到了 ComfyUI 原生节点之外的扩展节点。**装到算力目标那台机器的 `ComfyUI/custom_nodes/` 下**：
+这些工作流用到了 ComfyUI 原生节点之外的扩展节点。**装到算力目标那台机器的 `ComfyUI/custom_nodes/` 下**。
 
-### 三个工作流都必须装的
+> 下面这份清单是逐个节点核对出来的：用 ComfyUI 的 `/object_info` 接口查每个节点的 `python_module`，再回到 `custom_nodes/` 里定位它由哪个包提供。**只有确实用到的才列。**
+
+### 配音 + 识别（`qwen3-tts-*` / `qwen3-asr-_api`）
 
 | 节点包 | 提供的关键节点 | 仓库 |
 |---|---|---|
-| **ComfyUI-Qwen3-TTS** | `Qwen3Loader`、`Qwen3VoiceClone` | [DarioFT/ComfyUI-Qwen3-TTS](https://github.com/DarioFT/ComfyUI-Qwen3-TTS) |
+| **ComfyUI-Qwen3-TTS** | `Qwen3Loader`、`Qwen3VoiceClone`、`Qwen3CustomVoice`、`Qwen3VoiceDesign` | [DarioFT/ComfyUI-Qwen3-TTS](https://github.com/DarioFT/ComfyUI-Qwen3-TTS) |
 | **ComfyUI-Qwen3-ASR** | `Qwen3ASRLoader`、`Qwen3ASRTranscribe` | [DarioFT/ComfyUI-Qwen3-ASR](https://github.com/DarioFT/ComfyUI-Qwen3-ASR) |
 
-### 数字人（`minimax-h3-copy-json`）额外要的
+### 数字人（`minimax-h3-copy-json`）
 
 | 节点包 | 提供的关键节点 | 仓库 |
 |---|---|---|
+| **ComfyUI-KJNodes** | `MiniMaxChunkFeedForward`、`MiniMaxLowVRAMAttention`、`ModelPreviewOverrideKJ` | [kijai/ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes) |
 | **selflift-Avatar** | `SelfLiftAvatarH3Sampler` | [slmonker/selflift-Avatar](https://github.com/slmonker/selflift-Avatar) |
-| **ComfyUI-MiniMaxH3-Easy** | `MiniMaxH3ReferenceToVideo`、`MiniMaxLowVRAMAttention` | [nkxx188/ComfyUI-MiniMaxH3-Easy](https://github.com/nkxx188/ComfyUI-MiniMaxH3-Easy) |
 | **ComfyUI-SoundFlow** | `SoundFlow_GetLength` | [huixingyun/ComfyUI-SoundFlow](https://github.com/huixingyun/ComfyUI-SoundFlow) |
+| **ComfyUI-VideoHelperSuite** | `VHS_VideoCombine` | [Kosinkadink/ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) |
 
-数字人这套还用到几类通用节点，通常已经装了，缺的话按提示补：
+### 不需要装的（容易装错）
 
-- `VHS_VideoCombine` — [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite)
-- `ModelPreviewOverrideKJ` — [ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes)
-- `LTXV*` 系列 — [ComfyUI-LTXVideo](https://github.com/Lightricks/ComfyUI-LTXVideo)
+| 包 | 为什么不需要 |
+|---|---|
+| ~~ComfyUI-MiniMaxH3-Easy~~ | 它提供的是一套独立的 `MiniMaxH3Easy*` 高层封装节点。本工作流用的是 ComfyUI **内置**的 `MiniMaxH3ReferenceToVideo` + KJNodes 的辅助节点，**一个 Easy 节点都没用到**。装了不会出错，但纯属多余。 |
+| ~~ComfyUI-LTXVideo~~ | `LTXVConcatAVLatent`、`LTXVSeparateAVLatent`、`LTXVAudioVAEEncode` 这几个节点**已经内置在 ComfyUI 里**（`comfy_extras/nodes_lt.py`），不需要额外的扩展包。 |
+
+### 其余节点都是 ComfyUI 内置
+
+`UNETLoader`、`VAELoader`、`CLIPLoader`、`LoadImage`、`LoadAudio`、`VAEDecode`、`LoraLoaderModelOnly`、`ConditioningZeroOut`、`SetLatentNoiseMask`、`SolidMask`、`BasicScheduler`、`KSamplerSelect`、`ImageScaleToTotalPixels`、`ResolutionSelector`、`ComfyMathExpression`、`ComfyNumberConvert`、`TrimAudioDuration`、`PreviewAny`、`MiniMaxH3ReferenceToVideo`、`ModelAttentionBackend` —— 这些来自 `nodes.py` 和 `comfy_extras/`，**不用装任何东西**。
+
+> **对 ComfyUI 版本的要求**：内置的 MiniMax H3 节点（`comfy_extras/nodes_minimax_h3.py`）和 LTXV 节点（`comfy_extras/nodes_lt.py`）是较新版本才有的。实测 **ComfyUI 0.42.1 可用**。如果你的算力目标版本很老、缺这两个文件，升级 ComfyUI 而不是去装第三方封装。
 
 ### 缺节点怎么补
 
@@ -93,3 +103,22 @@ python workflows/_export_from_comfypet.py
 它会剥掉算力绑定和时间戳，并对导出结果跑一遍敏感信息扫描（URL / IP / 绝对路径 / 凭证），扫到任何一处都会报错退出。
 
 > ⚠️ **不要导出 `targets.json`**。那个文件里有真实的算力服务器地址，属于私有配置。
+
+### 改节点清单前先跑这个
+
+节点依赖是**逐个核对**出来的，不是靠仓库名猜的。写清单或改工作流之后：
+
+```bash
+python workflows/_check_node_deps.py                 # 核对依赖 + 与 README 自动对账
+python workflows/_check_node_deps.py --print-table   # 直接输出可贴进文档的表格
+```
+
+它优先查 ComfyUI 的 `/object_info`（能准确区分内置/外部），再扫 `custom_nodes/` 定位包名；
+最后拿结果和本文件的表格对账，漏写、多写、写错都会报出来。
+
+**为什么必须有这个脚本**：这个清单靠印象写过两次，两次都错——
+
+1. 曾误以为需要 `ComfyUI-MiniMaxH3-Easy`。实际那个包提供的是一套独立的 `MiniMaxH3Easy*` 高层封装，本工作流一个都没用到；用的是 ComfyUI **内置**的 `MiniMaxH3ReferenceToVideo` 加 KJNodes 的几个辅助节点。
+2. 曾误以为需要 `ComfyUI-LTXVideo`。实际 `LTXV*` 节点已经内置在 `comfy_extras/nodes_lt.py`。
+
+这两个包的信息在 ComfyUI 社区里传得很广，光看搜索结果很容易顺手写上。**只有查 `python_module` 才知道真相。**
