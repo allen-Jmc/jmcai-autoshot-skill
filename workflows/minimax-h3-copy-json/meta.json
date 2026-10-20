@@ -1,0 +1,19 @@
+{
+ "id": "minimax-h3-copy-json",
+ "name": "▶▷MiniMax H3-数字人",
+ "description": "",
+ "summary": "基于 MiniMax H3 模型的数字人生成工作流。输入音频（或切片）与人像底图，自动匹配口型、表情与微动作，输出对齐的高清视频。",
+ "format": "api",
+ "inputModalities": [
+  "audio",
+  "image",
+  "text"
+ ],
+ "outputModalities": [
+  "video"
+ ],
+ "enabled": true,
+ "tags": [
+  "local"
+ ]
+}

@@ -1,0 +1,57 @@
+{
+  "1": {
+    "class_type": "Qwen3Loader",
+    "inputs": {
+      "repo_id": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+      "source": "ModelScope",
+      "precision": "bf16",
+      "attention": "auto",
+      "local_model_path": ""
+    },
+    "_meta": {
+      "title": "Qwen3Loader"
+    }
+  },
+  "2": {
+    "class_type": "Qwen3VoiceDesign",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "text": "主人你好，我是可儿，正在为你测试声音设计功能。模型已就绪！",
+      "instruct": "年轻温和的女性声音，干练直接，语速适中，清晰亲切。",
+      "language": "Chinese",
+      "seed": 42
+    },
+    "_meta": {
+      "title": "Qwen3VoiceDesign"
+    }
+  },
+  "3": {
+    "class_type": "PreviewAudio",
+    "inputs": {
+      "audio": [
+        "2",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "PreviewAudio"
+    }
+  },
+  "4": {
+    "class_type": "SaveAudioAdvanced",
+    "inputs": {
+      "audio": [
+        "2",
+        0
+      ],
+      "filename_prefix": "audio/Qwen3-VoiceDesign",
+      "format": "flac"
+    },
+    "_meta": {
+      "title": "保存合成音频 (供API/JMCAI导出)"
+    }
+  }
+}

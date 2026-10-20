@@ -1,0 +1,17 @@
+{
+ "id": "qwen3-tts-voicedesign-_api",
+ "name": "▶▷Qwen3-TTS-声音设计(VoiceDesign)_api",
+ "description": "",
+ "summary": "没有参考音频时，用一段自然语言 Prompt 凭空“捏造”全新独一无二的音色。",
+ "format": "api",
+ "inputModalities": [
+  "text"
+ ],
+ "outputModalities": [
+  "audio"
+ ],
+ "enabled": true,
+ "tags": [
+  "local"
+ ]
+}

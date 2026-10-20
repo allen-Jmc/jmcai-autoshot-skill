@@ -1,0 +1,346 @@
+{
+  "workflowId": "qwen3-tts-_api-2",
+  "fields": [
+    {
+      "id": "1:repo_id",
+      "alias": "repo_id",
+      "nodeId": "1",
+      "field": "repo_id",
+      "nodeClass": "Qwen3Loader",
+      "type": "enum",
+      "required": true,
+      "defaultValue": "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
+      "description": "",
+      "choices": [
+        "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
+        "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+        "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice",
+        "Qwen/Qwen3-TTS-12Hz-0.6B-Base"
+      ],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "1:source",
+      "alias": "source",
+      "nodeId": "1",
+      "field": "source",
+      "nodeClass": "Qwen3Loader",
+      "type": "enum",
+      "required": true,
+      "defaultValue": "ModelScope",
+      "description": "",
+      "choices": [
+        "HuggingFace",
+        "ModelScope"
+      ],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "1:precision",
+      "alias": "precision",
+      "nodeId": "1",
+      "field": "precision",
+      "nodeClass": "Qwen3Loader",
+      "type": "enum",
+      "required": true,
+      "defaultValue": "bf16",
+      "description": "",
+      "choices": [
+        "fp16",
+        "bf16",
+        "fp32"
+      ],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "1:attention",
+      "alias": "attention",
+      "nodeId": "1",
+      "field": "attention",
+      "nodeClass": "Qwen3Loader",
+      "type": "enum",
+      "required": true,
+      "defaultValue": "auto",
+      "description": "",
+      "choices": [
+        "auto",
+        "flash_attention_2",
+        "sdpa",
+        "eager"
+      ],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "1:local_model_path",
+      "alias": "file_1",
+      "nodeId": "1",
+      "field": "local_model_path",
+      "nodeClass": "Qwen3Loader",
+      "type": "file",
+      "required": false,
+      "defaultValue": "",
+      "description": "Input file path",
+      "choices": [],
+      "enabled": false,
+      "source": "auto",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "2:text",
+      "alias": "text",
+      "nodeId": "2",
+      "field": "text",
+      "nodeClass": "Qwen3CustomVoice",
+      "type": "string",
+      "required": true,
+      "defaultValue": "你好，主人！我是可儿，住在机房里的运维精灵。Qwen3语音合成测试成功！",
+      "description": "台词文本：要合成朗读的文字内容",
+      "choices": [],
+      "enabled": true,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "2:language",
+      "alias": "language",
+      "nodeId": "2",
+      "field": "language",
+      "nodeClass": "Qwen3CustomVoice",
+      "type": "enum",
+      "required": false,
+      "defaultValue": "Chinese",
+      "description": "语种控制（中文通常固定设为 Chinese 即可）",
+      "choices": [
+        "Auto",
+        "Chinese",
+        "English",
+        "Japanese",
+        "Korean",
+        "German",
+        "French",
+        "Russian",
+        "Portuguese",
+        "Spanish",
+        "Italian"
+      ],
+      "enabled": true,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "manual",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "2:speaker",
+      "alias": "speaker",
+      "nodeId": "2",
+      "field": "speaker",
+      "nodeClass": "Qwen3CustomVoice",
+      "type": "enum",
+      "required": true,
+      "defaultValue": "Vivian",
+      "description": "发音人角色：<br>• Vivian：活泼干练年轻女声（推荐）<br>• Serena：温柔亲切女声<br>• Uncle_Fu：成熟稳重大叔音<br>• Dylan / Eric：阳光青年男声",
+      "choices": [
+        "Vivian",
+        "Serena",
+        "Uncle_Fu",
+        "Dylan",
+        "Eric",
+        "Ryan",
+        "Aiden",
+        "Ono_Anna",
+        "Sohee"
+      ],
+      "enabled": true,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "manual",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "2:seed",
+      "alias": "seed",
+      "nodeId": "2",
+      "field": "seed",
+      "nodeClass": "Qwen3CustomVoice",
+      "type": "int",
+      "required": false,
+      "defaultValue": 42,
+      "description": "Random seed",
+      "choices": [],
+      "min": 1,
+      "max": 18446744073709552000,
+      "enabled": true,
+      "source": "auto",
+      "constraintSources": {
+        "type": "auto",
+        "required": "manual",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "2:instruct",
+      "alias": "instruct",
+      "nodeId": "2",
+      "field": "instruct",
+      "nodeClass": "Qwen3CustomVoice",
+      "type": "string",
+      "required": false,
+      "defaultValue": "",
+      "description": "情绪与语气提示词：例如填：\"带笑意，语速较快\" 或 \"沉稳严肃的解说风格\"",
+      "choices": [],
+      "enabled": true,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "2:custom_speaker_name",
+      "alias": "custom_speaker_name",
+      "nodeId": "2",
+      "field": "custom_speaker_name",
+      "nodeClass": "Qwen3CustomVoice",
+      "type": "string",
+      "required": false,
+      "defaultValue": "",
+      "description": "",
+      "choices": [],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "4:filename_prefix",
+      "alias": "filename_prefix",
+      "nodeId": "4",
+      "field": "filename_prefix",
+      "nodeClass": "SaveAudioAdvanced",
+      "type": "string",
+      "required": true,
+      "defaultValue": "audio/Qwen3-CustomVoice",
+      "description": "",
+      "choices": [],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "4:format",
+      "alias": "audio_4",
+      "nodeId": "4",
+      "field": "format",
+      "nodeClass": "SaveAudioAdvanced",
+      "type": "audio",
+      "required": true,
+      "defaultValue": "flac",
+      "description": "Input audio path",
+      "choices": [],
+      "enabled": false,
+      "source": "auto",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    }
+  ]
+}

@@ -1,0 +1,331 @@
+{
+  "workflowId": "qwen3-asr-_api",
+  "fields": [
+    {
+      "id": "1:audio",
+      "alias": "audio_1",
+      "nodeId": "1",
+      "field": "audio",
+      "nodeClass": "LoadAudio",
+      "type": "audio",
+      "required": true,
+      "defaultValue": "唐僧.mp3",
+      "description": "待识别音频：即配音阶段合成好的朗读音频文件",
+      "choices": [],
+      "enabled": true,
+      "source": "auto",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "2:repo_id",
+      "alias": "repo_id",
+      "nodeId": "2",
+      "field": "repo_id",
+      "nodeClass": "Qwen3ASRLoader",
+      "type": "enum",
+      "required": true,
+      "defaultValue": "Qwen/Qwen3-ASR-1.7B",
+      "description": "",
+      "choices": [
+        "Qwen/Qwen3-ASR-1.7B",
+        "Qwen/Qwen3-ASR-0.6B"
+      ],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "2:source",
+      "alias": "source",
+      "nodeId": "2",
+      "field": "source",
+      "nodeClass": "Qwen3ASRLoader",
+      "type": "enum",
+      "required": true,
+      "defaultValue": "ModelScope",
+      "description": "",
+      "choices": [
+        "HuggingFace",
+        "ModelScope"
+      ],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "2:precision",
+      "alias": "precision",
+      "nodeId": "2",
+      "field": "precision",
+      "nodeClass": "Qwen3ASRLoader",
+      "type": "enum",
+      "required": true,
+      "defaultValue": "bf16",
+      "description": "",
+      "choices": [
+        "fp16",
+        "bf16",
+        "fp32"
+      ],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "2:attention",
+      "alias": "attention",
+      "nodeId": "2",
+      "field": "attention",
+      "nodeClass": "Qwen3ASRLoader",
+      "type": "enum",
+      "required": true,
+      "defaultValue": "auto",
+      "description": "",
+      "choices": [
+        "auto",
+        "flash_attention_2",
+        "sdpa",
+        "eager"
+      ],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "2:forced_aligner",
+      "alias": "forced_aligner",
+      "nodeId": "2",
+      "field": "forced_aligner",
+      "nodeClass": "Qwen3ASRLoader",
+      "type": "enum",
+      "required": false,
+      "defaultValue": "Qwen/Qwen3-ForcedAligner-0.6B",
+      "description": "",
+      "choices": [
+        "None",
+        "Qwen/Qwen3-ForcedAligner-0.6B"
+      ],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "2:local_model_path",
+      "alias": "file_2",
+      "nodeId": "2",
+      "field": "local_model_path",
+      "nodeClass": "Qwen3ASRLoader",
+      "type": "file",
+      "required": false,
+      "defaultValue": "",
+      "description": "Input file path",
+      "choices": [],
+      "enabled": false,
+      "source": "auto",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "3:language",
+      "alias": "language",
+      "nodeId": "3",
+      "field": "language",
+      "nodeClass": "Qwen3ASRTranscribe",
+      "type": "enum",
+      "required": false,
+      "defaultValue": "auto",
+      "description": "语种：默认 \"auto\" 即可自动识别，中文也可显式填 \"zh\"",
+      "choices": [
+        "auto",
+        "Chinese",
+        "English",
+        "Cantonese",
+        "Arabic",
+        "German",
+        "French",
+        "Spanish",
+        "Portuguese",
+        "Indonesian",
+        "Italian",
+        "Korean",
+        "Russian",
+        "Thai",
+        "Vietnamese",
+        "Japanese",
+        "Turkish",
+        "Hindi",
+        "Malay",
+        "Dutch",
+        "Swedish",
+        "Danish",
+        "Finnish",
+        "Polish",
+        "Czech",
+        "Filipino",
+        "Persian",
+        "Greek",
+        "Hungarian",
+        "Macedonian",
+        "Romanian"
+      ],
+      "enabled": true,
+      "source": "manual",
+      "constraintSources": {
+        "type": "manual",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "3:context",
+      "alias": "context",
+      "nodeId": "3",
+      "field": "context",
+      "nodeClass": "Qwen3ASRTranscribe",
+      "type": "string",
+      "required": false,
+      "defaultValue": "",
+      "description": "",
+      "choices": [],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "3:return_timestamps",
+      "alias": "return_timestamps",
+      "nodeId": "3",
+      "field": "return_timestamps",
+      "nodeClass": "Qwen3ASRTranscribe",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": true,
+      "description": "",
+      "choices": [],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "7:filename_prefix",
+      "alias": "filename_prefix",
+      "nodeId": "7",
+      "field": "filename_prefix",
+      "nodeClass": "SaveText",
+      "type": "string",
+      "required": true,
+      "defaultValue": "asr/Qwen3-Timestamps",
+      "description": "",
+      "choices": [],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    },
+    {
+      "id": "7:format",
+      "alias": "format",
+      "nodeId": "7",
+      "field": "format",
+      "nodeClass": "SaveText",
+      "type": "string",
+      "required": true,
+      "defaultValue": "txt",
+      "description": "",
+      "choices": [],
+      "enabled": false,
+      "source": "manual",
+      "constraintSources": {
+        "type": "auto",
+        "required": "auto",
+        "defaultValue": "auto",
+        "choices": "auto",
+        "min": "auto",
+        "max": "auto",
+        "step": "auto"
+      }
+    }
+  ]
+}

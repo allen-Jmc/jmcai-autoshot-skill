@@ -1,0 +1,94 @@
+{
+  "1": {
+    "class_type": "LoadAudio",
+    "inputs": {
+      "audio": "唐僧.mp3"
+    },
+    "_meta": {
+      "title": "LoadAudio"
+    }
+  },
+  "2": {
+    "class_type": "Qwen3ASRLoader",
+    "inputs": {
+      "repo_id": "Qwen/Qwen3-ASR-1.7B",
+      "source": "ModelScope",
+      "precision": "bf16",
+      "attention": "auto",
+      "forced_aligner": "Qwen/Qwen3-ForcedAligner-0.6B",
+      "local_model_path": ""
+    },
+    "_meta": {
+      "title": "Qwen3ASRLoader"
+    }
+  },
+  "3": {
+    "class_type": "Qwen3ASRTranscribe",
+    "inputs": {
+      "model": [
+        "2",
+        0
+      ],
+      "audio": [
+        "1",
+        0
+      ],
+      "language": "auto",
+      "context": "",
+      "return_timestamps": true
+    },
+    "_meta": {
+      "title": "Qwen3ASRTranscribe"
+    }
+  },
+  "4": {
+    "class_type": "PreviewAny",
+    "inputs": {
+      "source": [
+        "3",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "识别结果 (文本)"
+    }
+  },
+  "5": {
+    "class_type": "PreviewAny",
+    "inputs": {
+      "source": [
+        "3",
+        2
+      ]
+    },
+    "_meta": {
+      "title": "时间戳 (ForcedAligner 词级对齐)"
+    }
+  },
+  "6": {
+    "class_type": "PreviewAny",
+    "inputs": {
+      "source": [
+        "3",
+        1
+      ]
+    },
+    "_meta": {
+      "title": "检测语言"
+    }
+  },
+  "7": {
+    "class_type": "SaveText",
+    "inputs": {
+      "text": [
+        "3",
+        2
+      ],
+      "filename_prefix": "asr/Qwen3-Timestamps",
+      "format": "txt"
+    },
+    "_meta": {
+      "title": "保存时间戳文本 (供API/JMCAI导出)"
+    }
+  }
+}

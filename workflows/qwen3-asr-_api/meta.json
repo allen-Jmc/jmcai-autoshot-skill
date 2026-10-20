@@ -1,0 +1,17 @@
+{
+ "id": "qwen3-asr-_api",
+ "name": "▶▷Qwen3-ASR-语音识别与时间戳_api",
+ "description": "",
+ "summary": "纯文本字级时间戳（每行格式如 0.00-0.32: 徒），供字幕渲染与音视频切分使用",
+ "format": "api",
+ "inputModalities": [
+  "audio"
+ ],
+ "outputModalities": [
+  "file"
+ ],
+ "enabled": true,
+ "tags": [
+  "local"
+ ]
+}

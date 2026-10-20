@@ -1,0 +1,120 @@
+{
+  "1": {
+    "class_type": "Qwen3ASRLoader",
+    "inputs": {
+      "repo_id": "Qwen/Qwen3-ASR-1.7B",
+      "source": "ModelScope",
+      "precision": "bf16",
+      "attention": "auto",
+      "forced_aligner": "None",
+      "local_model_path": ""
+    },
+    "_meta": {
+      "title": "Qwen3ASRLoader"
+    }
+  },
+  "2": {
+    "class_type": "Qwen3ASRTranscribe",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "audio": [
+        "4",
+        0
+      ],
+      "language": "auto",
+      "context": "",
+      "return_timestamps": false
+    },
+    "_meta": {
+      "title": "Qwen3ASRTranscribe"
+    }
+  },
+  "4": {
+    "class_type": "LoadAudio",
+    "inputs": {
+      "audio": "唐僧.mp3"
+    },
+    "_meta": {
+      "title": "LoadAudio"
+    }
+  },
+  "5": {
+    "class_type": "PreviewAny",
+    "inputs": {
+      "source": [
+        "2",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "参考音频识别文本"
+    }
+  },
+  "6": {
+    "class_type": "Qwen3Loader",
+    "inputs": {
+      "repo_id": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+      "source": "ModelScope",
+      "precision": "bf16",
+      "attention": "auto",
+      "local_model_path": ""
+    },
+    "_meta": {
+      "title": "Qwen3Loader"
+    }
+  },
+  "7": {
+    "class_type": "PreviewAudio",
+    "inputs": {
+      "audio": [
+        "9",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "PreviewAudio"
+    }
+  },
+  "9": {
+    "class_type": "Qwen3VoiceClone",
+    "inputs": {
+      "model": [
+        "6",
+        0
+      ],
+      "ref_audio": [
+        "4",
+        0
+      ],
+      "ref_text": [
+        "2",
+        0
+      ],
+      "text": "徒儿们莫慌，为师今日用声音克隆法术，在此测试一番。",
+      "seed": 42,
+      "language": "Auto",
+      "max_new_tokens": 2048,
+      "ref_audio_max_seconds": 30
+    },
+    "_meta": {
+      "title": "Qwen3VoiceClone"
+    }
+  },
+  "12": {
+    "class_type": "SaveAudioAdvanced",
+    "inputs": {
+      "audio": [
+        "9",
+        0
+      ],
+      "filename_prefix": "audio/Qwen3-VoiceClone",
+      "format": "flac"
+    },
+    "_meta": {
+      "title": "保存合成音频 (供API/JMCAI导出)"
+    }
+  }
+}

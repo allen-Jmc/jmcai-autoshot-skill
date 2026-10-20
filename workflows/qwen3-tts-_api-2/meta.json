@@ -1,0 +1,17 @@
+{
+ "id": "qwen3-tts-_api-2",
+ "name": "▶▷Qwen3-TTS-语音合成(预设音色)_api",
+ "description": "",
+ "summary": "无需参考音频，从 9 种高质量官方预设发音人中挑选，且支持语气/情绪自然语言控制。",
+ "format": "api",
+ "inputModalities": [
+  "text"
+ ],
+ "outputModalities": [
+  "audio"
+ ],
+ "enabled": true,
+ "tags": [
+  "local"
+ ]
+}

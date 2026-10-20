@@ -1,0 +1,59 @@
+{
+  "1": {
+    "class_type": "Qwen3Loader",
+    "inputs": {
+      "repo_id": "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
+      "source": "ModelScope",
+      "precision": "bf16",
+      "attention": "auto",
+      "local_model_path": ""
+    },
+    "_meta": {
+      "title": "Qwen3Loader"
+    }
+  },
+  "2": {
+    "class_type": "Qwen3CustomVoice",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "text": "你好，主人！我是可儿，住在机房里的运维精灵。Qwen3语音合成测试成功！",
+      "language": "Chinese",
+      "speaker": "Vivian",
+      "seed": 42,
+      "instruct": "",
+      "custom_speaker_name": ""
+    },
+    "_meta": {
+      "title": "Qwen3CustomVoice"
+    }
+  },
+  "3": {
+    "class_type": "PreviewAudio",
+    "inputs": {
+      "audio": [
+        "2",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "PreviewAudio"
+    }
+  },
+  "4": {
+    "class_type": "SaveAudioAdvanced",
+    "inputs": {
+      "audio": [
+        "2",
+        0
+      ],
+      "filename_prefix": "audio/Qwen3-CustomVoice",
+      "format": "flac"
+    },
+    "_meta": {
+      "title": "保存合成音频 (供API/JMCAI导出)"
+    }
+  }
+}

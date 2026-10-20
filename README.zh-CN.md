@@ -60,13 +60,15 @@ cp -r jmcai-autoshot ~/.claude/skills/jmcai-autoshot
 
    装好之后确认：
    - 桌面端正常运行，**Workflow Bridge 已开启**（默认端口 `32100`）。
-   - 在桌面端里**已配置并启用这 4 套工作流**（缺任何一套，对应阶段就会失败）：
+   - 在桌面端里**已配置并启用这 3 套工作流**（缺任何一套，对应阶段就会失败）：
      - `qwen3-tts-_api`（声音克隆，可选备选：`qwen3-tts-_api-2` 预设音色、`qwen3-tts-voicedesign-_api` 声音设计）
      - `qwen3-asr-_api`（字级时间戳识别）
      - `minimax-h3-copy-json`（MiniMax H3 数字人生成）
    - **算力目标已绑好**（本地 ComfyUI，或一台装了 4090 的机器）。
 
-   > 如果你装的桌面端版本较旧、里面找不到上面这几套工作流，先升级到最新版再看。工作流模板是随桌面端版本走的。
+   > **Comfypet 不自带任何工作流**，全新安装后工作流列表是空的。
+   > 这 5 套工作流的定义文件已经放在仓库里，直接导入即可 → **[`workflows/`](workflows/README.md)**
+   > 那里还有依赖的自定义节点清单和各节点包的 GitHub 链接。缺节点时用 ComfyUI-Manager 的「Install Missing Custom Nodes」一键补齐。
 
 2. **基础依赖自检**：
    ```bash

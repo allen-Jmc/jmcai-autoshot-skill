@@ -1,0 +1,18 @@
+{
+ "id": "qwen3-tts-_api",
+ "name": "▶▷Qwen3-TTS-声音克隆_api",
+ "description": "",
+ "summary": "原汁原味复刻音色。​内置了 ASR 自动提取参考音频文本，外部只需提供「参考音频」和「目标台词」，无需手动反查参考文本！",
+ "format": "api",
+ "inputModalities": [
+  "text",
+  "audio"
+ ],
+ "outputModalities": [
+  "image"
+ ],
+ "enabled": true,
+ "tags": [
+  "local"
+ ]
+}

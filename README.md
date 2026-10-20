@@ -66,7 +66,9 @@ On the target machine:
      - `minimax-h3-copy-json` (MiniMax H3 Avatar generation)
    - **A compute target is bound** (local ComfyUI, or a machine with a 4090).
 
-   > If your desktop version is older and these workflows are missing, upgrade to the latest release first — workflow templates ship with the desktop app.
+   > **Comfypet ships with no workflows** — a fresh install has an empty workflow list.
+   > The definitions for all 5 workflows are included in this repo → **[`workflows/`](workflows/README.md)**
+   > That page also lists the required custom node packages with GitHub links. Missing nodes can be installed in one click via ComfyUI-Manager's "Install Missing Custom Nodes".
 
 2. **Environment Self-Check**:
    ```bash
