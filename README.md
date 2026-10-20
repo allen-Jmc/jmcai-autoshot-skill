@@ -6,6 +6,10 @@ Turn a raw script into a fully packaged, ready-to-publish talking-head video: cl
 
 **100% Local & Private Execution**: Powered by the local **JMCAI Comfypet Desktop Workflow Bridge** (`127.0.0.1:32100`) and private GPU compute targets (e.g. RTX 4090). **Zero cloud API keys, zero cloud billing**.
 
+![Sample frames](docs/demo_face.jpg)
+
+> All four frames come from the same 27.6-second video: full-screen opening → bottom-right PIP with a left info panel → full-frame graphics (37 tests lighting up one by one) → branded ending. The presenter rotates through three modes instead of a single pinned thumbnail.
+
 ---
 
 ## 3-Stage Pipeline

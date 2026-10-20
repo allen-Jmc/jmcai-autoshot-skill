@@ -34,8 +34,11 @@ node_modules/
 *.jpg
 *.jpeg
 *.png
+# 展示图要进仓库（README 引用），模板素材也是（随包带的人脸模型等）
 !assets/**/*.png
 !assets/**/*.jpg
+!docs/**/*.jpg
+!docs/**/*.png
 
 # 用户数据与音色历史（可能含个人声音样本，绝不入仓）
 voice_history.json
