@@ -67,7 +67,16 @@ python scripts/avatar/check_setup.py   # 数字人
 
 `UNETLoader`、`VAELoader`、`CLIPLoader`、`LoadImage`、`LoadAudio`、`VAEDecode`、`LoraLoaderModelOnly`、`ConditioningZeroOut`、`SetLatentNoiseMask`、`SolidMask`、`BasicScheduler`、`KSamplerSelect`、`ImageScaleToTotalPixels`、`ResolutionSelector`、`ComfyMathExpression`、`ComfyNumberConvert`、`TrimAudioDuration`、`PreviewAny`、`MiniMaxH3ReferenceToVideo`、`ModelAttentionBackend` —— 这些来自 `nodes.py` 和 `comfy_extras/`，**不用装任何东西**。
 
-> **对 ComfyUI 版本的要求**：内置的 MiniMax H3 节点（`comfy_extras/nodes_minimax_h3.py`）和 LTXV 节点（`comfy_extras/nodes_lt.py`）是较新版本才有的。实测 **ComfyUI 0.42.1 可用**。如果你的算力目标版本很老、缺这两个文件，升级 ComfyUI 而不是去装第三方封装。
+> **对 ComfyUI 版本的要求**：内置的 MiniMax H3 节点（`comfy_extras/nodes_minimax_h3.py`）和 LTXV 节点（`comfy_extras/nodes_lt.py`）是较新版本才有的。
+>
+> 这份清单在**两套环境上分别核对过**，结论一致：
+>
+> | 环境 | ComfyUI 版本 | 节点总数 | 结论 |
+> |---|---|---|---|
+> | 本地 ComfyUI（RTX 4060 Ti） | 0.42.1 | 988 | 归属与上表一致 |
+> | 生产算力目标（RTX 4090） | **0.41.2** | 5139 | 38 种节点全部存在，归属与上表一致 |
+>
+> 也就是说 **0.41.2 及以上的 ComfyUI 都能直接用**。如果你的算力目标版本更老、缺 `nodes_minimax_h3.py` 或 `nodes_lt.py`，升级 ComfyUI 本体，而不是去装第三方封装。
 
 ### 缺节点怎么补
 
@@ -109,12 +118,21 @@ python workflows/_export_from_comfypet.py
 节点依赖是**逐个核对**出来的，不是靠仓库名猜的。写清单或改工作流之后：
 
 ```bash
-python workflows/_check_node_deps.py                 # 核对依赖 + 与 README 自动对账
-python workflows/_check_node_deps.py --print-table   # 直接输出可贴进文档的表格
+# 查本机 ComfyUI（默认 8188）
+python workflows/_check_node_deps.py
+
+# 查实际跑片子的算力目标 —— 这一步最该做
+python workflows/_check_node_deps.py --target-url https://<你的算力目标>:8188
+
+# 直接输出可贴进文档的表格
+python workflows/_check_node_deps.py --print-table
 ```
 
 它优先查 ComfyUI 的 `/object_info`（能准确区分内置/外部），再扫 `custom_nodes/` 定位包名；
-最后拿结果和本文件的表格对账，漏写、多写、写错都会报出来。
+最后拿结果和本文件的表格对账，漏写、多写、写错都会报出来。报告里还会打印 ComfyUI 版本和设备。
+
+**为什么一定要查目标机**：本机和生产目标的版本经常不一样（实测本机 0.42.1、目标机 0.41.2）。
+内置节点和外部节点的边界随版本变，只有查目标机才知道这份清单在真正跑片子的环境里成不成立。
 
 **为什么必须有这个脚本**：这个清单靠印象写过两次，两次都错——
 

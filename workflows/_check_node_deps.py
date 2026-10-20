@@ -9,10 +9,16 @@
 用法：
     python workflows/_check_node_deps.py                # 查每套工作流的外部依赖，并与 README 对账
     python workflows/_check_node_deps.py --print-table  # 直接打印可贴进 README 的表格
+    python workflows/_check_node_deps.py --target-url https://<算力目标>:8188
+                                                        # 对着**实际跑片子的那台机器**核对
+
+**为什么一定要能查目标机**：本机 ComfyUI 和生产算力目标的版本往往不同（实测本机 0.42.1、
+目标机 0.41.2）。内置节点和外部节点的边界随版本变，只有查目标机的 /object_info 才能确定
+"这份依赖清单在真正跑片子的环境里成不成立"。
 
 判定依据，从强到弱：
   1. ComfyUI 在跑 → 查 /object_info 的 python_module（最权威，能区分内置/外部）
-  2. 扫 custom_nodes/ 下的 NODE_CLASS_MAPPINGS 键（定位到具体包名）
+  2. 扫 custom_nodes/ 下的 NODE_CLASS_MAPPINGS 键（定位到具体包名，只能查本机）
   3. 都没有 → 标为"未知"，不要猜
 """
 import argparse
@@ -38,11 +44,36 @@ def class_types(wf):
     return {v["class_type"] for v in wf.values() if isinstance(v, dict) and "class_type" in v}
 
 
-def try_object_info(port=8188):
+def fetch_object_info(url_or_port, timeout=120):
+    """从 ComfyUI 取 object_info。支持完整 URL（查远程算力目标）或端口号（查本机）。"""
+    if isinstance(url_or_port, str) and url_or_port.startswith("http"):
+        u = url_or_port.rstrip("/") + "/object_info"
+    else:
+        u = "http://127.0.0.1:%d/object_info" % int(url_or_port)
     try:
-        return json.load(urllib.request.urlopen("http://127.0.0.1:%d/object_info" % port, timeout=60))
+        return json.load(urllib.request.urlopen(u, timeout=timeout)), u
+    except Exception as e:
+        return None, "%s（%s）" % (u, type(e).__name__)
+
+
+def fetch_version(url_or_port):
+    """顺便报一下 ComfyUI 版本，便于确认两台机器是否一致。"""
+    if isinstance(url_or_port, str) and url_or_port.startswith("http"):
+        u = url_or_port.rstrip("/") + "/system_stats"
+    else:
+        u = "http://127.0.0.1:%d/system_stats" % int(url_or_port)
+    try:
+        d = json.load(urllib.request.urlopen(u, timeout=30))
+        devs = ", ".join("%s %.0fGB" % (x.get("name", "?"), x.get("vram_total", 0) / 2 ** 30)
+                         for x in d.get("devices", []))
+        return "%s ｜ %s" % (d.get("system", {}).get("comfyui_version", "?"), devs or "?")
     except Exception:
-        return None
+        return "版本未知"
+
+
+def try_object_info(port=8188):
+    oi, _ = fetch_object_info(port)
+    return oi
 
 
 def scan_packages(comfy_root):
@@ -105,15 +136,21 @@ def doc_claims():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--comfyui", default=os.environ.get("COMFYUI_HOME") or DEFAULT_COMFYUI,
-                    help="ComfyUI 安装目录（用于扫 custom_nodes）")
-    ap.add_argument("--port", type=int, default=8188, help="ComfyUI 端口，查 object_info 用")
+                    help="本机 ComfyUI 安装目录（用于扫 custom_nodes）")
+    ap.add_argument("--port", type=int, default=8188, help="本机 ComfyUI 端口")
+    ap.add_argument("--target-url",
+                    help="算力目标的 ComfyUI 地址，如 https://host:8188 —— 查它会同时覆盖 --port")
     ap.add_argument("--print-table", action="store_true", help="打印可贴进 README 的表格")
     a = ap.parse_args()
 
-    oi = try_object_info(a.port)
+    src = a.target_url or a.port
+    oi, where = fetch_object_info(src)
     fs = scan_packages(a.comfyui)
-    print("数据源：object_info %s；custom_nodes %s（%d 个类名）"
-          % ("✓" if oi else "✗ 未连上", "✓" if fs else "✗ 没扫到", len(fs)))
+    print("数据源：%s %s" % (where, "✓" if oi else "✗ 连不上"))
+    if oi:
+        print("        ComfyUI %s，%d 个节点" % (fetch_version(src), len(oi)))
+    print("        custom_nodes %s（本机扫到 %d 个类名，仅用于定位包名）"
+          % ("✓" if fs else "✗ 没扫到", len(fs)))
 
     all_ext = {}
     for name, wf in workflows():
