@@ -56,31 +56,11 @@ python scripts/avatar/check_setup.py   # 数字人
 | **ComfyUI-SoundFlow** | `SoundFlow_GetLength` | [huixingyun/ComfyUI-SoundFlow](https://github.com/huixingyun/ComfyUI-SoundFlow) |
 | **ComfyUI-VideoHelperSuite** | `VHS_VideoCombine` | [Kosinkadink/ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite) |
 
-### 不需要装的（容易装错）
-
-| 包 | 为什么不需要 |
-|---|---|
-| ~~ComfyUI-MiniMaxH3-Easy~~ | 它提供的是一套独立的 `MiniMaxH3Easy*` 高层封装节点。本工作流用的是 ComfyUI **内置**的 `MiniMaxH3ReferenceToVideo` + KJNodes 的辅助节点，**一个 Easy 节点都没用到**。装了不会出错，但纯属多余。 |
-| ~~ComfyUI-LTXVideo~~ | `LTXVConcatAVLatent`、`LTXVSeparateAVLatent`、`LTXVAudioVAEEncode` 这几个节点**已经内置在 ComfyUI 里**（`comfy_extras/nodes_lt.py`），不需要额外的扩展包。 |
-
-### 其余节点都是 ComfyUI 内置
-
-`UNETLoader`、`VAELoader`、`CLIPLoader`、`LoadImage`、`LoadAudio`、`VAEDecode`、`LoraLoaderModelOnly`、`ConditioningZeroOut`、`SetLatentNoiseMask`、`SolidMask`、`BasicScheduler`、`KSamplerSelect`、`ImageScaleToTotalPixels`、`ResolutionSelector`、`ComfyMathExpression`、`ComfyNumberConvert`、`TrimAudioDuration`、`PreviewAny`、`MiniMaxH3ReferenceToVideo`、`ModelAttentionBackend` —— 这些来自 `nodes.py` 和 `comfy_extras/`，**不用装任何东西**。
-
-> **对 ComfyUI 版本的要求**：内置的 MiniMax H3 节点（`comfy_extras/nodes_minimax_h3.py`）和 LTXV 节点（`comfy_extras/nodes_lt.py`）是较新版本才有的。
->
-> 这份清单在**两套环境上分别核对过**，结论一致：
->
-> | 环境 | ComfyUI 版本 | 节点总数 | 结论 |
-> |---|---|---|---|
-> | 本地 ComfyUI（RTX 4060 Ti） | 0.42.1 | 988 | 归属与上表一致 |
-> | 生产算力目标（RTX 4090） | **0.41.2** | 5139 | 38 种节点全部存在，归属与上表一致 |
->
-> 也就是说 **0.41.2 及以上的 ComfyUI 都能直接用**。如果你的算力目标版本更老、缺 `nodes_minimax_h3.py` 或 `nodes_lt.py`，升级 ComfyUI 本体，而不是去装第三方封装。
-
 ### 缺节点怎么补
 
 不用一个个比对。在 ComfyUI 里**导入 `workflow.json` 打开画布**，ComfyUI-Manager 会弹出「Install Missing Custom Nodes」，点它按提示装完重启即可。装完再导入到 Comfypet。
+
+如果提示缺的是 `MiniMaxH3ReferenceToVideo` 或 `LTXV*` 这类节点，那说明 ComfyUI 本体版本偏旧——**升级 ComfyUI 自己**，不要去找第三方封装包补（社区里有几个名字相近的包，但提供的不是这些节点，装了也不管用）。
 
 ## 三、模型文件
 
@@ -115,7 +95,7 @@ python workflows/_export_from_comfypet.py
 
 ### 改节点清单前先跑这个
 
-节点依赖是**逐个核对**出来的，不是靠仓库名猜的。写清单或改工作流之后：
+节点依赖必须**逐个核对**，不能靠仓库名猜。写清单或改工作流之后：
 
 ```bash
 # 查本机 ComfyUI（默认 8188）
@@ -128,15 +108,9 @@ python workflows/_check_node_deps.py --target-url https://<你的算力目标>:8
 python workflows/_check_node_deps.py --print-table
 ```
 
-它优先查 ComfyUI 的 `/object_info`（能准确区分内置/外部），再扫 `custom_nodes/` 定位包名；
-最后拿结果和本文件的表格对账，漏写、多写、写错都会报出来。报告里还会打印 ComfyUI 版本和设备。
+它查 ComfyUI 的 `/object_info` 拿每个节点的 `python_module`（能准确区分内置还是外部包），
+再和本文件的表格对账，漏写、多写、写错都会报出来。
 
-**为什么一定要查目标机**：本机和生产目标的版本经常不一样（实测本机 0.42.1、目标机 0.41.2）。
-内置节点和外部节点的边界随版本变，只有查目标机才知道这份清单在真正跑片子的环境里成不成立。
+**必须查目标机**：开发机和跑片子的机器经常不是同一个 ComfyUI 版本，而内置节点和外部节点的边界会随版本变。只有查目标机才知道这份清单在真实环境里成不成立。
 
-**为什么必须有这个脚本**：这个清单靠印象写过两次，两次都错——
-
-1. 曾误以为需要 `ComfyUI-MiniMaxH3-Easy`。实际那个包提供的是一套独立的 `MiniMaxH3Easy*` 高层封装，本工作流一个都没用到；用的是 ComfyUI **内置**的 `MiniMaxH3ReferenceToVideo` 加 KJNodes 的几个辅助节点。
-2. 曾误以为需要 `ComfyUI-LTXVideo`。实际 `LTXV*` 节点已经内置在 `comfy_extras/nodes_lt.py`。
-
-这两个包的信息在 ComfyUI 社区里传得很广，光看搜索结果很容易顺手写上。**只有查 `python_module` 才知道真相。**
+**为什么不能靠猜**：社区里有几个名字相近的包（比如各种 MiniMax H3 的封装），看名字很像"应该需要"，实际提供的节点完全不同。`python_module` 是唯一可靠的依据。
