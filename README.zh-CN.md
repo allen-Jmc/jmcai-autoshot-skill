@@ -2,9 +2,15 @@
 
 **简体中文** | [English](README.md)
 
+[![Comfypet 桌面端](https://img.shields.io/badge/前置依赖-下载%20JMCAI%20Comfypet%20桌面端-3DDC84)](https://github.com/allen-Jmc/comfypet-jmcai-Dist/releases/latest)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 把一段文案做成一条可以直接发布的数字人口播成片：用你自己的声音配音、让一张照片开口说话并带手势，再配上动态包装、字幕、卡片与音效，全自动一条龙出片。
 
 **纯本地 / 私有化运行**：基于本地 **JMCAI Comfypet 桌面端 Workflow Bridge**（`127.0.0.1:32100`）调度算力（如 RTX 4090），**无需任何线上 API Key，不产生任何云端费用**。
+
+> **⚠️ 必须先装桌面端再装本技能。** 本技能只是调度外壳，配音 / 识别 / 数字人三个模型都跑在 Comfypet 里。
+> 👉 **[下载 JMCAI Comfypet 桌面端](https://github.com/allen-Jmc/comfypet-jmcai-Dist/releases/latest)**（Windows 安装版 / 便携版、macOS DMG）
 
 ![成片效果](docs/demo_face.jpg)
 
@@ -39,13 +45,29 @@ cp -r jmcai-autoshot ~/.claude/skills/jmcai-autoshot
 ### 2. 前置准备
 
 在目标设备上仅需准备两项：
-1. **启动 JMCAI Comfypet 桌面端**：
-   - 确认桌面端正常运行，Workflow Bridge 处于开启状态（默认端口 `32100`）。
-   - 确认在桌面端中已配置并启用了 4 套工作流：
+
+1. **安装并启动 JMCAI Comfypet 桌面端**
+
+   这个技能的所有算力调度都走 Comfypet 的 Workflow Bridge，**没有它跑不起来**。下载：
+
+   | 平台 | 推荐包 | 适合谁 | 下载 |
+   |---|---|---|---|
+   | Windows | 安装版 | 大多数用户，支持自动更新与系统集成 | [下载安装包](https://github.com/allen-Jmc/comfypet-jmcai-Dist/releases/latest) |
+   | Windows | 便携版 | 不想安装、希望放移动盘或独立目录 | [Releases 页](https://github.com/allen-Jmc/comfypet-jmcai-Dist/releases/latest) 选 `portable.exe` |
+   | macOS | DMG | 直接拖入 Applications | [Releases 页](https://github.com/allen-Jmc/comfypet-jmcai-Dist/releases/latest) 选 `.dmg` |
+
+   全部版本见 [Releases](https://github.com/allen-Jmc/comfypet-jmcai-Dist/releases)，仓库主页 [comfypet-jmcai-Dist](https://github.com/allen-Jmc/comfypet-jmcai-Dist)，官网 [jmcai.cn](https://jmcai.cn)。
+
+   装好之后确认：
+   - 桌面端正常运行，**Workflow Bridge 已开启**（默认端口 `32100`）。
+   - 在桌面端里**已配置并启用这 4 套工作流**（缺任何一套，对应阶段就会失败）：
      - `qwen3-tts-_api`（声音克隆，可选备选：`qwen3-tts-_api-2` 预设音色、`qwen3-tts-voicedesign-_api` 声音设计）
      - `qwen3-asr-_api`（字级时间戳识别）
      - `minimax-h3-copy-json`（MiniMax H3 数字人生成）
-   - 确认算力目标已绑定好可用算力（如本地 ComfyUI 或外部 4090 服务器）。
+   - **算力目标已绑好**（本地 ComfyUI，或一台装了 4090 的机器）。
+
+   > 如果你装的桌面端版本较旧、里面找不到上面这几套工作流，先升级到最新版再看。工作流模板是随桌面端版本走的。
+
 2. **基础依赖自检**：
    ```bash
    python scripts/setup_env.py

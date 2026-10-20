@@ -2,9 +2,15 @@
 
 [简体中文](README.zh-CN.md) | **English**
 
+[![Comfypet Desktop](https://img.shields.io/badge/Requires-Download%20JMCAI%20Comfypet-3DDC84)](https://github.com/allen-Jmc/comfypet-jmcai-Dist/releases/latest)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 Turn a raw script into a fully packaged, ready-to-publish talking-head video: clone your voice, animate a portrait photo with realistic gestures, and package the video with dynamic motion graphics, subtitles, information cards, and sound effects.
 
 **100% Local & Private Execution**: Powered by the local **JMCAI Comfypet Desktop Workflow Bridge** (`127.0.0.1:32100`) and private GPU compute targets (e.g. RTX 4090). **Zero cloud API keys, zero cloud billing**.
+
+> **⚠️ Install the desktop app before this skill.** This skill is only a scheduling shell — the TTS, ASR, and avatar models all run inside Comfypet.
+> 👉 **[Download JMCAI Comfypet Desktop](https://github.com/allen-Jmc/comfypet-jmcai-Dist/releases/latest)** (Windows installer / portable, macOS DMG)
 
 ![Sample frames](docs/demo_face.jpg)
 
@@ -39,12 +45,29 @@ cp -r jmcai-autoshot ~/.claude/skills/jmcai-autoshot
 ### 2. Prerequisites
 
 On the target machine:
-1. **Launch JMCAI Comfypet Desktop**:
-   - Ensure the Workflow Bridge is active (listening on `127.0.0.1:32100`).
-   - Ensure the following workflows are enabled and bound to your compute target:
+
+1. **Install and launch JMCAI Comfypet Desktop**
+
+   All compute scheduling goes through Comfypet's Workflow Bridge — **the skill cannot run without it**.
+
+   | Platform | Recommended | Best for | Download |
+   |---|---|---|---|
+   | Windows | Installer | Most users; auto-update + system integration | [Download installer](https://github.com/allen-Jmc/comfypet-jmcai-Dist/releases/latest) |
+   | Windows | Portable | No install, run from a USB drive or standalone folder | [Releases page](https://github.com/allen-Jmc/comfypet-jmcai-Dist/releases/latest) → `portable.exe` |
+   | macOS | DMG | Drag into Applications | [Releases page](https://github.com/allen-Jmc/comfypet-jmcai-Dist/releases/latest) → `.dmg` |
+
+   All versions: [Releases](https://github.com/allen-Jmc/comfypet-jmcai-Dist/releases) · Repo: [comfypet-jmcai-Dist](https://github.com/allen-Jmc/comfypet-jmcai-Dist) · Website: [jmcai.cn](https://jmcai.cn)
+
+   Then verify:
+   - The desktop app is running and the **Workflow Bridge is active** (default port `32100`).
+   - The following workflows are **enabled** (missing any one breaks that stage):
      - `qwen3-tts-_api` (Voice Cloning; fallback options: `qwen3-tts-_api-2`, `qwen3-tts-voicedesign-_api`)
      - `qwen3-asr-_api` (ASR with character-level timestamps)
      - `minimax-h3-copy-json` (MiniMax H3 Avatar generation)
+   - **A compute target is bound** (local ComfyUI, or a machine with a 4090).
+
+   > If your desktop version is older and these workflows are missing, upgrade to the latest release first — workflow templates ship with the desktop app.
+
 2. **Environment Self-Check**:
    ```bash
    python scripts/setup_env.py
