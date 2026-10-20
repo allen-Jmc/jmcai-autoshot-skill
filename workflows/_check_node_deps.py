@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 """核对工作流用到的节点分别由哪个包提供，并和 README 里的清单对账。
 
-维护者工具。写节点依赖清单时**不要靠印象或仓库名猜**——实测踩过两次：
-  1. 以为需要 ComfyUI-MiniMaxH3-Easy，实际那个包提供的是独立的 MiniMaxH3Easy* 封装，
-     工作流用的是 ComfyUI 内置的 MiniMaxH3ReferenceToVideo + KJNodes 的辅助节点，一个都没用到；
-  2. 以为需要 ComfyUI-LTXVideo，实际 LTXV* 节点已经内置在 comfy_extras/nodes_lt.py 里。
+维护者工具。写节点依赖清单时**不要靠印象或仓库名猜**——实测踩过：社区里有几个名字
+很像"这个工作流肯定需要它"的封装包，查下来发现它们提供的节点完全不同，一个都没用到；
+还有几个"需要另装扩展包"的节点其实早已内置在 ComfyUI 本体里。两者都曾照着印象写进清单。
 
 用法：
     python workflows/_check_node_deps.py                # 查每套工作流的外部依赖，并与 README 对账
@@ -30,7 +29,38 @@ import sys
 import urllib.request
 
 HERE = pathlib.Path(__file__).resolve().parent
-DEFAULT_COMFYUI = r"C:/Users/cdall/Pictures/ComfyUI_windows_portable-G313/ComfyUI_windows_portable-G313/ComfyUI"
+
+# 找本机 ComfyUI 安装目录（只用于扫 custom_nodes 定位包名）。
+# 不能写死任何人的绝对路径——这里曾经硬编码过开发机的安装路径，
+# 分享出去既暴露用户名、又对别人完全无效。做法：环境变量优先，再扫常见位置。
+COMFYUI_CANDIDATES = [
+    os.environ.get("COMFYUI_HOME"),
+    os.path.expanduser("~/ComfyUI"),
+    os.path.expanduser("~/ComfyUI_windows_portable"),
+    os.path.expanduser("~/Pictures/ComfyUI_windows_portable-G313"),
+    os.path.expanduser("~/Downloads/ComfyUI_windows_portable"),
+    r"C:\ComfyUI_windows_portable",
+    r"D:\ComfyUI_windows_portable",
+    "/opt/ComfyUI",
+]
+
+
+def guess_comfyui():
+    """返回第一个看起来像 ComfyUI 安装目录的路径，找不到就返回空串。"""
+    import glob
+    for root in COMFYUI_CANDIDATES:
+        if not root:
+            continue
+        if (pathlib.Path(root) / "custom_nodes").is_dir():
+            return root
+        for hit in glob.glob(os.path.join(root, "*", "custom_nodes")):
+            return str(pathlib.Path(hit).parent)
+        for hit in glob.glob(os.path.join(root, "*", "*", "custom_nodes")):
+            return str(pathlib.Path(hit).parent)
+    return ""
+
+
+DEFAULT_COMFYUI = guess_comfyui()
 
 
 def workflows():
