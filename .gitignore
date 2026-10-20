@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.eggs/
+build/
+dist/
+venv/
+.venv/
+env/
+
+# Node / Remotion
+node_modules/
+.npm/
+.remotion/
+*.tsbuildinfo
+
+# 工程与成片产物（体积大、每人本机不同，不进仓库）
+# 注意：这几条必须用前导 / 锚定到仓库根目录。
+# 不加斜杠时 `avatar/` 会匹配任意层级，把 tests/avatar/ 一起吞掉——
+# 实测踩过：66 个文件里 tests/ 整个目录都丢了，而它正是这个技能的卖点之一。
+/package/
+/final/
+/avatar/
+/cache/
+/out/
+/out_prev/
+*.mp4
+*.wav
+*.mp3
+*.jpg
+*.jpeg
+*.png
+!assets/**/*.png
+!assets/**/*.jpg
+
+# 用户数据与音色历史（可能含个人声音样本，绝不入仓）
+voice_history.json
+*.workbuddy-ai/
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+
+# 日志与临时文件
+*.log
+*.tmp
+*.bak

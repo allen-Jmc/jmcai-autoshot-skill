@@ -1,0 +1,19 @@
+# 统一换行符，避免跨平台协作时被改坏
+# render.sh 一旦变成 CRLF，在 Linux/macOS 上会报 "bad interpreter"；render.cmd 反过来必须是 CRLF。
+* text=auto eol=lf
+
+*.sh    text eol=lf
+*.cmd   text eol=crlf
+*.bat   text eol=crlf
+*.py    text eol=lf
+*.ts    text eol=lf
+*.tsx   text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
+
+# 二进制，不做换行转换
+*.xml   text eol=lf
+*.png   binary
+*.jpg   binary
+*.mp4   binary
+*.wav   binary
